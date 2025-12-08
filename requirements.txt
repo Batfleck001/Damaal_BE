@@ -1,0 +1,8 @@
+langgraph
+langchain-xai
+openai
+python-dotenv
+Flask
+groq
+langchain-groq
+supabase
