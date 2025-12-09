@@ -37,7 +37,7 @@ def add_user():
     print(Advice)
 
     ExpenseAdvice = expensegraph.invoke({"expense" : expense, "balance" : updated_balance})
-
+#included necessary info
     result = u.insert("Daily_logs",{
         "log" : log,
         "advice" : Advice.get("response"),
