@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from utils import Utils
 from Agents.MentorAgent import build_mentorgraph
 from Agents.ExpenseAgent import build_Expensegraph
-import json
+import json,os
 
 mentorgraph = build_mentorgraph()
 expensegraph = build_Expensegraph()
@@ -74,4 +74,4 @@ def list_users():
 
 
 if __name__ == "__main__":
-    app.run(port=5000, debug=True)
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))

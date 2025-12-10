@@ -6,3 +6,4 @@ Flask
 groq
 langchain-groq
 supabase
+gunicorn
