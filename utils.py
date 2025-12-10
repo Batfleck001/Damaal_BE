@@ -16,10 +16,21 @@ class Utils:
         
     def groq_chat(self, prompt: str) -> str:
         resp = self.client.chat.completions.create(
-            model="openai/gpt-oss-20b",  
+            model="llama-3.3-70b-versatile",  
             messages=[{"role": "user", "content": prompt}],
-            temperature=0.5,
-            max_tokens=256,
+            max_tokens=200, 
+            temperature=0.7,
+            stream=False  
+        )
+        return resp.choices[0].message.content
+    
+    def groq_chat_lite(self, prompt: str) -> str:
+        resp = self.client.chat.completions.create(
+            model="Llama-3.1-8B-Instant",  
+            messages=[{"role": "user", "content": prompt}],
+            max_tokens=200, 
+            temperature=0.7,
+            stream=False  
         )
         return resp.choices[0].message.content
 

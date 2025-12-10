@@ -11,23 +11,18 @@ class MentorState(TypedDict):
 def Mentor_node(state: MentorState):
     dlog = state["log"]
 
-    prompt = f"""
+    prompt_template = f"""
     You are a high-performance self-development mentor.
 
-        Analyze the user’s daily log {dlog} and give a short 3–5 line response.  
-        Each line must begin with the following labels:
+        Analyze the user’s daily log {dlog} and produce a sharp 1–2 line summary.
+        Include only the most important insights about progress, limitations, growth or money opportunities, and the most critical correction or push for tomorrow, if relevant.
 
-        1. Wins of the Day:
-        2. Limits & Fears Noticed:
-        3. Money & Growth Opportunities:
-        4. Corrections for Tomorrow:
-        5. Self-Development Push:
-
-        Tone: direct, honest, growth-focused, and actionable. Keep every line concise.
-
+        Tone: direct, honest, growth-focused, and actionable.
+        No labels, no bullets, no formatting.
+        Keep the response extremely concise and under 220 tokens.
     """
 
-    response = u.groq_chat(prompt)
+    response = u.groq_chat(prompt_template)
     state["response"] = response
     print(state)
     return state

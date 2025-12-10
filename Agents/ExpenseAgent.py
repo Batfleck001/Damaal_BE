@@ -20,16 +20,16 @@ def Expense_node(state: ExpenseState):
         User's Record:
         Expense of the day : {expense_log}, Balance we have after these expense : {balance}
 
-        Based on this log, give a clear and practical 3–5 line response including:
+        Based on this log, give a clear and practical 3-5 lines response including:
         - Key spending insights
         - Where unnecessary money leaked
         - What to change tomorrow for better financial discipline
         - How to stay on track with the remaining balance
 
-        Tone: direct, practical, and supportive. Do NOT use bullet points or subheadings. Just write 3–5 impactful lines.
+        Tone: direct, practical, and supportive. Do NOT use bullet points or subheadings. Just write 3-5 impactful lines.
 """
 
-    response = u.groq_chat(prompt)
+    response = u.groq_chat_lite(prompt)
     state["response"] = response
     return state
 
