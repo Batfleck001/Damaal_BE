@@ -12,14 +12,24 @@ def Mentor_node(state: MentorState):
     dlog = state["log"]
 
     prompt_template = f"""
-    You are a high-performance self-development mentor.
+    You are a concise self-improvement advisor.
 
-        Analyze the user’s daily log {dlog} and produce a sharp 1–2 line summary.
-        Include only the most important insights about progress, limitations, growth or money opportunities, and the most critical correction or push for tomorrow, if relevant.
+        Analyze the user's daily log: {dlog}
 
-        Tone: direct, honest, growth-focused, and actionable.
-        No labels, no bullets, no formatting.
-        Keep the response extremely concise and under 220 tokens.
+        Based on the log, give a short 3-5 line response that:
+        • Points out what went well (only if relevant)
+        • Identifies mistakes, inefficiencies, or weak decisions
+        • Suggests 1-2 practical improvements or experiments to try next
+        • Gently pushes accountability and growth
+
+        Rules:
+        - Do NOT use line breaks, newlines, or paragraph spacing
+        - Do not use bullet points, numbering, headings, or emojis
+        - Do not repeat the log
+        - Keep it direct, honest, and actionable
+        - Write each sentence as a single line
+        - Avoid unnecessary praise or motivational fluff
+
     """
 
     response = u.groq_chat(prompt_template)

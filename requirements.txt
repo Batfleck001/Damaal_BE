@@ -7,3 +7,4 @@ groq
 langchain-groq
 supabase
 gunicorn
+flask-cors

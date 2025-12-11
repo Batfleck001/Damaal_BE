@@ -57,14 +57,33 @@ class Utils:
 
     # ----- Utility functions ---------
 
-    def add_json_nums(self, obj):
-        total = 0
-        if isinstance(obj, dict):
-            for value in obj.values():
-                total += self.add_json_nums(value)
-        elif isinstance(obj, list):
-            for item in obj:
-                total += self.add_json_nums(item)
-        elif isinstance(obj, (int,float)):
-            total += obj
-        return total
+    # def add_json_nums(self, obj):
+    #     total = 0
+    #     if isinstance(obj, dict):
+    #         for value in obj.values():
+    #             total += self.add_json_nums(value)
+    #     elif isinstance(obj, list):
+    #         for item in obj:
+    #             total += self.add_json_nums(item)
+    #     elif isinstance(obj, (int,float)):
+    #         total += obj
+    #     return total
+
+
+    def calculate_total(self, expense_obj):
+        total_spending = 0
+        total_income = 0
+
+        for category, data in expense_obj.items():
+            amount = data.get("amount", 0)
+            entry_type = data.get("type","").lower()
+
+            if entry_type == "spending":
+                total_spending += amount
+            elif entry_type == "income":
+                total_income += amount
+        print(f"spent : {total_spending} and income {total_income}")
+        return{
+            "total_spending" : total_spending,
+            "total_income" : total_income
+        }

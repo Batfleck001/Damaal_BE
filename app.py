@@ -1,4 +1,5 @@
 from flask import jsonify,Flask, request
+from flask_cors import CORS
 from supabase import create_client, Client
 from dotenv import load_dotenv
 from utils import Utils
@@ -10,7 +11,7 @@ mentorgraph = build_mentorgraph()
 expensegraph = build_Expensegraph()
 
 app = Flask(__name__)
-
+CORS(app)
 #include Utils
 
 u = Utils()
@@ -27,16 +28,18 @@ def add_user():
     expense = data.get("expense")
 
     #total expense of the day
-    total = u.add_json_nums(expense)
-    expense["total"] = total
+    total = u.calculate_total(expense)
+    expense["total_spending"] = total.get("total_spending")
+    expense["total_income"] = total.get("total_income")
     resp = u.last_updated_get("Daily_logs", "balance")
     current_balance  = resp.data[0]["balance"]
-    updated_balance = current_balance - total
+    updated_balance = current_balance - total.get("total_spending")
+    updated_balance += total.get("total_income")
 
     Advice = mentorgraph.invoke({"log":log})
     print(Advice)
 
-    ExpenseAdvice = expensegraph.invoke({"expense" : expense, "balance" : updated_balance})
+    ExpenseAdvice = expensegraph.invoke({"expense" : expense,"bal_bef_expense":current_balance , "balance" : updated_balance})
 #included necessary info
     result = u.insert("Daily_logs",{
         "log" : log,

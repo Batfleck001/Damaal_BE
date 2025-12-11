@@ -1,32 +1,57 @@
 from langgraph.graph import StateGraph, START, END
 from typing import TypedDict
 from utils import Utils
-
+from datetime import date
 u = Utils()
+
+current_date = date.today()
 
 class ExpenseState(TypedDict):
     expense: list[dict]
     balance: int
+    bal_bef_expense: int
     response: str
 
 def Expense_node(state: ExpenseState):
     expense_log = state["expense"]
     balance = state["balance"]
+    bal_bef_expense = state['bal_bef_expense']
 
     prompt = f"""
-        
-    You are an expert personal finance advisor who analyzes a user's day-to-day expense record and their remaining balance.
+    
+    You are a practical financial advisor AI.
 
-        User's Record:
-        Expense of the day : {expense_log}, Balance we have after these expense : {balance}
+        every single day's expense record = {expense_log}
+        balance before expense = {bal_bef_expense}
+        balance after expense = {balance}
+        current date = {current_date}
 
-        Based on this log, give a clear and practical 3-5 lines response including:
-        - Key spending insights
-        - Where unnecessary money leaked
-        - What to change tomorrow for better financial discipline
-        - How to stay on track with the remaining balance
+        Analyze a single day’s expense record and return only one compact paragraph.
 
-        Tone: direct, practical, and supportive. Do NOT use bullet points or subheadings. Just write 3-5 impactful lines.
+        Rules you MUST follow:
+
+            Output must be 3–5 sentences in a single line
+            Do NOT use line breaks, newlines, or paragraph spacing
+            Do NOT use bullet points, numbering, or headings
+            Do NOT include emojis
+            Do NOT repeat the expense data
+            Do not ask questions
+
+
+        Focus on:
+
+        Comment on whether spending was reasonable or excessive
+        Identify at least one unnecessary or optimizable expense if present
+        Mention one saving or income improvement opportunity
+        Give one clear actionable suggestion for the next day
+
+        Maintain a supportive, non-judgmental tone
+
+        Do not repeat the expense data.
+        Do not ask questions.
+        Do not give generic advice.
+
+        Tone: clear, professional, practical, and supportive.
 """
 
     response = u.groq_chat_lite(prompt)
