@@ -51,6 +51,7 @@ def Expense_node(state: ExpenseState):
         Do not ask questions.
         Do not give generic advice.
 
+        Note : Amounts are in Indian Currency.
         Tone: clear, professional, practical, and supportive.
 """
 
