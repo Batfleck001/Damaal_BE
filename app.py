@@ -31,7 +31,7 @@ def add_user():
     total = u.calculate_total(expense)
     expense["total_spending"] = total.get("total_spending")
     expense["total_income"] = total.get("total_income")
-    resp = u.last_updated_get("Daily_logs", "balance")
+    resp = u.latest_balance("Daily_logs", "balance")
     current_balance  = resp.data[0]["balance"]
     updated_balance = current_balance - total.get("total_spending")
     updated_balance += total.get("total_income")
@@ -40,22 +40,28 @@ def add_user():
     print(Advice)
 
     ExpenseAdvice = expensegraph.invoke({"expense" : expense,"bal_bef_expense":current_balance , "balance" : updated_balance})
-#included necessary info
-    result = u.insert("Daily_logs",{
-        "log" : log,
-        "advice" : Advice.get("response"),
-        "expense" : expense,
-        "expense_advice" : ExpenseAdvice.get("response"),
-        "balance" : updated_balance
-    })
+    
+    if Advice or ExpenseAdvice:
+        result = u.insert("Daily_logs",{
+            "log" : log,
+            "advice" : Advice.get("response"),
+            "expense" : expense,
+            "expense_advice" : ExpenseAdvice.get("response"),
+            "balance" : updated_balance
+        })
 
+        return jsonify(result.data)
+    else:
+        return jsonify({"message": "No advice or expense advice available, record not inserted"}), 400
+
+# @app.route("/gb", methods=["GET"])
+# def get_balance():
+#     result = u.last_updated_get("Daily_logs","balance")
+#     return jsonify(result.data)
+@app.route("/list/latest", methods=["GET"])
+def latest_record():
+    result = u.last_updated_get("Daily_logs")
     return jsonify(result.data)
-
-@app.route("/gb", methods=["GET"])
-def get_balance():
-    result = u.last_updated_get("Daily_logs","balance")
-    return jsonify(result.data)
-
 
 
 @app.route("/balance", methods=["POST"])
@@ -76,5 +82,7 @@ def list_users():
     return jsonify(result.data)
 
 
+
 if __name__ == "__main__":
+    app.run(debug=True)
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))

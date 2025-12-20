@@ -45,10 +45,19 @@ class Utils:
     def get(self, tablename, columnname):
         return self.supabase.table(tablename).select(columnname).execute()
 
-    def last_updated_get(self, tablename, columnname):
+    def latest_balance(self, tablename, columnname):
         return (
             self.supabase.table(tablename)
             .select(columnname)
+            .order("id", desc=True)
+            .limit(1)
+            .execute()
+        )
+
+    def last_updated_get(self, tablename):
+        return (
+            self.supabase.table(tablename)
+            .select("*")
             .order("id", desc=True)
             .limit(1)
             .execute()
